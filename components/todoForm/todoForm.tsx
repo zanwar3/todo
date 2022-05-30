@@ -3,8 +3,8 @@ import { useSession } from "next-auth/react"
 
 function TodoForm(props:any){
     const {addTodoHandler} =props
-    const headingRef = useRef()
-    const descriptionRef = useRef()
+    const headingRef:any = useRef()
+    const descriptionRef:any = useRef()
     const { data: session } = useSession()
     const [toggle, setToggle] = useState(false);
 
@@ -14,9 +14,9 @@ function TodoForm(props:any){
         setToggle(true)
         
         const formData ={
-            heading:headingRef.current.value,
-            description:descriptionRef.current.value,
-            user:session.user.email
+            heading:headingRef?.current?.value,
+            description:descriptionRef?.current?.value,
+            user:session?.user?.email
         }
         console.log("formdata"+JSON.stringify(formData))
        await addTodoHandler(formData)

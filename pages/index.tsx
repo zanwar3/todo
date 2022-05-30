@@ -42,7 +42,8 @@ const Home: NextPage = (props:any) => {
 
 export async function getStaticProps(context:any)
 {
-  const client = await MongoClient.connect(process.env.MONGO_CONNECTION)
+  const mc:any =process.env.MONGO_CONNECTION 
+  const client = await MongoClient.connect(mc)
   const todoCollection=client.db().collection("todos")
   const todoArray = await todoCollection.find().toArray()
   client.close()

@@ -29,7 +29,7 @@ const AddTodo =()=>{
     }
     return(
         <Fragment>
-            <h2 class="font-medium leading-tight text-center mt-0 mb-2 text-blue-600">Please signIn to add </h2>
+            <h2 className="font-medium leading-tight text-center mt-0 mb-2 text-blue-600">Please signIn to add </h2>
         </Fragment>
     )
 }

@@ -34,7 +34,7 @@ function TodoItem(props:any){
 if(session){
     return(
         <Fragment>
-            { user==session.user.email?
+            { user==session?.user?.email?
                 <>
             <td className="py-5 font-bold text-blue-600">{heading}</td>
             <td className="py-5">{description}</td>
