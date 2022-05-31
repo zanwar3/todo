@@ -3,23 +3,34 @@ import Head from 'next/head'
 import { Fragment, useState } from 'react'
 import TodoItem from '../components/todoItem/todoItem'
 import useSWR from 'swr'
+import Spinner from '../components/spinner'
 
 const fetcher = (url: Request) => fetch(url).then((res) => res.json())
 
 const Home: NextPage = (props: any) => {
   const { data, error, mutate } = useSWR('/api/get-todo', fetcher)
   if (error) return <div>failed to load</div>
-  if (!data) return <div>loading...</div>
+  if (!data)
+    return (
+      <div className="flex justify-center ">
+        <div className="content-center">
+          <Spinner />
+        </div>
+      </div>
+    )
   const todos = data.todo
   const deleteTodoH = async (todoId: any, index: any) => {
     let newTodo = JSON.parse(JSON.stringify(todos))
     newTodo.splice(index)
+    mutate(
+      { ...data, todo: newTodo },
+      { optimisticData: newTodo, rollbackOnError: true }
+    )
     const resp = await fetch(`/api/delete/${todoId}`, {
       method: 'DELETE',
     })
       .then((res) => console.log('succ::' + res.json()))
       .catch((e) => console.log('err::' + e.json()))
-    mutate({ ...data, todo: newTodo })
   }
 
   return (

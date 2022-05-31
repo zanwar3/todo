@@ -1,9 +1,11 @@
 import { Fragment, useState } from 'react'
 import { useSession } from 'next-auth/react'
+import Spinner from '../spinner'
 
 function TodoItem(props: any) {
   const [del, setDel] = useState(false)
   const [toggle, setToggle] = useState(false)
+  const [load, setLoad] = useState(false)
   const { id, heading, description, user, deleteTodoH, index } = props
   const [done, setDone] = useState(props.done)
   const { data: session } = useSession()
@@ -11,16 +13,12 @@ function TodoItem(props: any) {
   const deleteTodo = async (todoId: any) => {
     setDel(true)
     deleteTodoH(todoId, index)
-    // const resp = await fetch(`/api/delete/${todoId}`, {
-    //   method: 'DELETE',
-    // })
-    //   .then((res) => console.log('succ::' + res.json()))
-    //   .catch((e) => console.log('err::' + e.json()))
     setDel(false)
   }
 
   const toggleDone = async (todoId: any, done: any) => {
     setToggle(true)
+    setLoad(true)
     await fetch(`/api/update/${todoId}/${done}`, {
       method: 'GET',
     })
@@ -29,6 +27,7 @@ function TodoItem(props: any) {
         setDone(done)
       })
       .catch((e) => 'error::' + e.json())
+    setLoad(false)
     setToggle(false)
   }
 
@@ -41,13 +40,19 @@ function TodoItem(props: any) {
             <td className="py-5">{description}</td>
             <td className="py-5">
               {done == 'true' ? (
-                <button
-                  className="text-green-700"
-                  onClick={() => toggleDone(id, 'false')}
-                  disabled={toggle}
-                >
-                  Completed
-                </button>
+                load ? (
+                  <Spinner />
+                ) : (
+                  <button
+                    className="text-green-700"
+                    onClick={() => toggleDone(id, 'false')}
+                    disabled={toggle}
+                  >
+                    Completed
+                  </button>
+                )
+              ) : load ? (
+                <Spinner />
               ) : (
                 <button
                   className="text-orange-700"
