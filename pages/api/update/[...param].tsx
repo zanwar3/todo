@@ -14,10 +14,10 @@ async function handler(req:any,res:any) {
     const collection = db.collection("todos")
     const result = await collection.updateOne(query,updateTodo,options)
     client.close()
-    console.log('updated record:::'+result)
     return res.json({
         todo:result,
-        message:"todo updated"
+        message:"todo updated",
+        update:true
     })
 
 }
